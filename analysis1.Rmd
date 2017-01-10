@@ -22,6 +22,8 @@ output:
 # Set knitr options: 
 knitr::opts_chunk$set(echo = FALSE,comment="",dpi=72*8,fig.width=10,fig.height=6.2)
 
+require(ggplot2)
+require(pander)
 
 ```
 
@@ -29,7 +31,10 @@ knitr::opts_chunk$set(echo = FALSE,comment="",dpi=72*8,fig.width=10,fig.height=6
 
 ```{r echo=FALSE}
 
-datNorthAm <- dat[dat$country %in% c("Canada","United States") &
+datNorthAm <- dat[dat$country %in% c("Canada","United States",
+                                     "Japan",
+                                     "China (People's Republic of)",
+                                     "Korea") &
                     dat$variable=="Immunisation: Hepatitis B",]
 
 pander(table(dat$year),citation="Records by year")
@@ -37,7 +42,7 @@ pander(table(dat$year),citation="Records by year")
 
 ```
 
-## Graph - Immunisation: Hepatitis B
+## Graph - Hepatitis B Immunisation in North America and East Asia
 
 ```{r echo=FALSE}
 
@@ -52,7 +57,34 @@ p <- p + stat_smooth(aes(colour = country),
               se = TRUE)
 
 p + ggtitle("Hepatitis B Immunisation") +
-  theme(plot.title = element_text(lineheight=.8, face="bold"))
+  theme(plot.title = element_text(lineheight=.8, face="bold")) +
+  xlab("Year") + ylab("% Imunized Children")
 
 ```
+
+## Graph - Immunisation of Influenza in North America and East Asia
+
+```{r echo=FALSE}
+
+datNorthAm <- dat[dat$country %in% c("Canada","United States",
+                                     "Japan",
+                                     "China (People's Republic of)",
+                                     "Korea") &
+                    dat$variable=="Immunisation: Influenza",]
+
+
+p <- ggplot(datNorthAm, aes(x=year, y=value, color=country)) +
+  geom_point()
+
+p <- p + stat_smooth(aes(colour = country),
+              method = "loess", 
+              formula = y ~ x, 
+              se = TRUE)
+
+p + ggtitle("Immunisation of Influenza") +
+  theme(plot.title = element_text(lineheight=.8, face="bold")) +
+  xlab("Year") + ylab("% Imunized Children")
+
+```
+
 

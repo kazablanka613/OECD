@@ -1,0 +1,39 @@
+---
+output: word_document
+---
+
+```{r echo=FALSE, cache= F}
+#knitr::read_chunk('root_source.R')
+
+source("root_source.R")
+
+```
+
+---
+title: AML in utero (20160093) ~ Schlosser
+author: "Vid Bijelic"
+date: '`r strftime(Sys.time(),format="%d-%b-%Y at %H:%M")`'
+output:
+  word_document:
+    reference_docx: `r rootT`templateLandscapeNarrowTopBottomMarginsSmallTableFont.docx
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Read Data from an R workspace and then clean up.
+#
+env <- attach(name)
+sr <- get("data",envir=env)
+detach(paste("file:",name,sep=""),character.only=TRUE)
+
+```
+
+## R Markdown
+
+```{r echo=FALSE}
+
+table(sr$country)
+
+```
+

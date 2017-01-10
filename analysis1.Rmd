@@ -19,21 +19,40 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Set knitr options: 
+knitr::opts_chunk$set(echo = FALSE,comment="",dpi=72*8,fig.width=10,fig.height=6.2)
 
-# Read Data from an R workspace and then clean up.
-#
-env <- attach(name)
-sr <- get("data",envir=env)
-detach(paste("file:",name,sep=""),character.only=TRUE)
 
 ```
 
-## R Markdown
+## Records by year
 
 ```{r echo=FALSE}
 
-table(sr$country)
+datNorthAm <- dat[dat$country %in% c("Canada","United States") &
+                    dat$variable=="Immunisation: Hepatitis B",]
+
+pander(table(dat$year),citation="Records by year")
+
+
+```
+
+## Graph - Immunisation: Hepatitis B
+
+```{r echo=FALSE}
+
+
+
+p <- ggplot(datNorthAm, aes(x=year, y=value, color=country)) +
+  geom_point()
+
+p <- p + stat_smooth(aes(colour = country),
+              method = "loess", 
+              formula = y ~ x, 
+              se = TRUE)
+
+p + ggtitle("Hepatitis B Immunisation") +
+  theme(plot.title = element_text(lineheight=.8, face="bold"))
 
 ```
 

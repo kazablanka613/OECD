@@ -1,21 +1,10 @@
 ---
-output: word_document
----
-
-```{r echo=FALSE, cache= F}
-#knitr::read_chunk('root_source.R')
-
-source("root_source.R")
-
-```
-
----
-title: OECD Health Care Utilization Data ~ Nick Barrowman
-author: "Vid Bijelic"
+title: OECD Health Care Utilization Data
+author: Vid Bijelic, Nick Barrowman
 date: '`r strftime(Sys.time(),format="%d-%b-%Y at %H:%M")`'
-output:
+output: 
   word_document:
-    reference_docx: `r rootT`templateLandscapeNarrowTopBottomMarginsSmallTableFont.docx
+    reference_docx: 'R:/CRU Epibiostat/Rmarkdown knitr/templateLandscape8ptArialNarrowMargins.docx'
 ---
 
 ```{r setup, include=FALSE}
@@ -25,6 +14,34 @@ knitr::opts_chunk$set(echo = FALSE,comment="",dpi=72*8,fig.width=10,fig.height=6
 require(ggplot2)
 require(pander)
 
+```
+
+```{r}
+source("root_source.R")
+```
+
+# Preliminary descriptives
+
+The data set has `r nrow(dat)` rows and `r ncol(dat)` columns.
+
+```{r}
+# Make pander tables as wide as necessary
+panderOptions('table.split.table', Inf)
+panderOptions('table.split.cells', Inf)
+```
+
+## Variables
+```{r}
+d <- dat[!duplicated(dat$var),]
+rownames(d) <- NULL
+
+pander(d[,c("var","variable")])
+```
+
+## Country by variable
+
+```{r}
+pander(table(dat$country,dat$var))
 ```
 
 ## Records by year
@@ -37,10 +54,12 @@ datNorthAm <- dat[dat$country %in% c("Canada","United States",
                                      "Korea") &
                     dat$variable=="Immunisation: Hepatitis B",]
 
-pander(table(dat$year),citation="Records by year")
+pander(cbind(table(dat$year)),citation="Records by year")
 
 
 ```
+
+# Graphs
 
 ## Graph - Hepatitis B Immunisation in North America and East Asia
 
